@@ -35,13 +35,26 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.paging.runtime)
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.moshi)
+    implementation(libs.moshi)
     implementation(libs.okhttp.logging)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
+
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.espresso)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
 }
 
 kapt {
