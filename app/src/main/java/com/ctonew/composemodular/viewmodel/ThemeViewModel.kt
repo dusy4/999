@@ -33,6 +33,12 @@ class ThemeViewModel @Inject constructor(
         }
     }
 
+    fun setAccentColor(colorArgb: Int) {
+        viewModelScope.launch {
+            themeRepository.setAccentColorArgb(colorArgb)
+        }
+    }
+
     private companion object {
         val AccentCycle: List<Int> = listOf(
             0xFF00E5FF.toInt(),
