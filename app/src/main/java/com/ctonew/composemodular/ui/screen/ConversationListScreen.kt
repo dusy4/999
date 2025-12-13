@@ -30,7 +30,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ctonew.composemodular.domain.chat.models.ChatConversation
-import com.ctonew.composemodular.ui.components.ConversationItem
 import com.ctonew.composemodular.viewmodel.ConversationListViewModel
 
 /**

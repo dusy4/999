@@ -93,43 +93,63 @@ class ChatRepositoryImpl @Inject constructor() : ChatRepository {
     }
 
     private fun initializeSampleData() {
+        val baseTime = LocalDateTime.now()
+        
         val sampleConversations = listOf(
             ChatConversation(
-                id = "1",
-                title = "Alice Johnson",
-                participantIds = listOf("user1", "alice"),
+                id = "conv_1",
+                title = "Sarah Chen",
+                participantIds = listOf("user1", "user2"),
                 lastMessage = null,
                 unreadCount = 2,
                 isPinned = true,
-                avatarUrl = "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face"
+                avatarUrl = "https://i.pravatar.cc/150?img=1",
+                createdAt = baseTime.minusDays(30),
+                updatedAt = baseTime.minusMinutes(5)
             ),
             ChatConversation(
-                id = "2",
-                title = "Dev Team",
-                participantIds = listOf("user1", "bob", "charlie", "diana"),
+                id = "conv_2",
+                title = "Design Team",
+                participantIds = listOf("user1", "user3", "user4", "user5"),
                 lastMessage = null,
-                unreadCount = 5,
+                unreadCount = 3,
                 isMuted = false,
                 isPinned = true,
                 conversationType = com.ctonew.composemodular.domain.chat.models.ConversationType.Group,
-                avatarUrl = "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=150&h=150&fit=crop&crop=face"
+                avatarUrl = "https://i.pravatar.cc/150?img=5",
+                createdAt = baseTime.minusDays(25),
+                updatedAt = baseTime.minusHours(2)
             ),
             ChatConversation(
-                id = "3",
-                title = "Bob Smith",
-                participantIds = listOf("user1", "bob"),
+                id = "conv_3",
+                title = "Alex Rivera",
+                participantIds = listOf("user1", "user3"),
                 lastMessage = null,
                 unreadCount = 0,
-                avatarUrl = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+                avatarUrl = "https://i.pravatar.cc/150?img=2",
+                createdAt = baseTime.minusDays(20),
+                updatedAt = baseTime.minusHours(3)
             ),
             ChatConversation(
-                id = "4",
-                title = "Charlie Brown",
-                participantIds = listOf("user1", "charlie"),
+                id = "conv_4",
+                title = "Jordan Kim",
+                participantIds = listOf("user1", "user4"),
                 lastMessage = null,
                 unreadCount = 1,
-                isMuted = true,
-                avatarUrl = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+                isMuted = false,
+                avatarUrl = "https://i.pravatar.cc/150?img=3",
+                createdAt = baseTime.minusDays(15),
+                updatedAt = baseTime.minusDays(1)
+            ),
+            ChatConversation(
+                id = "conv_5",
+                title = "Taylor Tech",
+                participantIds = listOf("user1", "user5"),
+                lastMessage = null,
+                unreadCount = 0,
+                avatarUrl = "https://i.pravatar.cc/150?img=4",
+                createdAt = baseTime.minusDays(10),
+                updatedAt = baseTime.minusDays(2)
             )
         )
 
@@ -139,46 +159,65 @@ class ChatRepositoryImpl @Inject constructor() : ChatRepository {
         sampleConversations.forEach { conversation ->
             val conversationMessages = createSampleMessages(conversation.id)
             messages[conversation.id] = conversationMessages
+            
+            // Update conversation with last message
+            if (conversationMessages.isNotEmpty()) {
+                val lastMsg = conversationMessages.last()
+                val index = conversations.indexOf(conversation)
+                conversations[index] = conversation.copy(
+                    lastMessage = lastMsg,
+                    updatedAt = lastMsg.timestamp
+                )
+            }
         }
     }
 
     private fun createSampleMessages(conversationId: String): MutableList<ChatMessage> {
         val messages = mutableListOf<ChatMessage>()
-        
-        val baseTime = LocalDateTime.now().minusDays(1)
+        val baseTime = LocalDateTime.now()
         
         when (conversationId) {
-            "1" -> { // Alice
+            "conv_1" -> { // Sarah Chen
                 messages.addAll(listOf(
-                    createMessage(conversationId, "alice", "Hey! How's it going?", baseTime.plusHours(1), isFromMe = false),
-                    createMessage(conversationId, "user1", "Pretty good, working on some exciting projects!", baseTime.plusHours(1).plusMinutes(15), isFromMe = true),
-                    createMessage(conversationId, "alice", "That sounds amazing! Tell me more about them", baseTime.plusHours(2), isFromMe = false),
-                    createMessage(conversationId, "user1", "Working on a Compose chat app with navigation and cool UI features", baseTime.plusHours(2).plusMinutes(30), isFromMe = true),
-                    createMessage(conversationId, "alice", "Nice! I love Jetpack Compose", baseTime.plusHours(3), isFromMe = false)
+                    createMessage(conversationId, "user2", "Hey! How's the new project going?", baseTime.minusHours(5), isFromMe = false),
+                    createMessage(conversationId, "user1", "It's going great! Just finished the UI design phase", baseTime.minusHours(4).plusMinutes(30), isFromMe = true),
+                    createMessage(conversationId, "user2", "That's awesome! I'd love to see the designs 🎨", baseTime.minusHours(4).plusMinutes(15), isFromMe = false),
+                    createMessage(conversationId, "user1", "I'll send them over tomorrow. Still refining a few things.", baseTime.minusHours(3).plusMinutes(45), isFromMe = true),
+                    createMessage(conversationId, "user2", "Perfect! Let me know if you need any feedback", baseTime.minusHours(3).plusMinutes(20), isFromMe = false),
+                    createMessage(conversationId, "user1", "Will do, thanks! 😊", baseTime.minusMinutes(5), isFromMe = true)
                 ))
             }
-            "2" -> { // Dev Team
+            "conv_2" -> { // Design Team
                 messages.addAll(listOf(
-                    createMessage(conversationId, "bob", "Team standup in 10 minutes", baseTime.plusHours(8), isFromMe = false),
-                    createMessage(conversationId, "charlie", "On my way to the meeting room", baseTime.plusHours(8).plusMinutes(5), isFromMe = false),
-                    createMessage(conversationId, "diana", "I'll be there in 5", baseTime.plusHours(8).plusMinutes(8), isFromMe = false),
-                    createMessage(conversationId, "user1", "Running late, be there in 10", baseTime.plusHours(8).plusMinutes(10), isFromMe = true),
-                    createMessage(conversationId, "bob", "No problem, we'll wait", baseTime.plusHours(8).plusMinutes(12), isFromMe = false)
+                    createMessage(conversationId, "user3", "Morning everyone! Quick update on the redesign", baseTime.minusHours(2), isFromMe = false),
+                    createMessage(conversationId, "user4", "Hey! I'm excited about the new direction", baseTime.minusHours(1).plusMinutes(50), isFromMe = false),
+                    createMessage(conversationId, "user1", "Looking forward to seeing the mockups", baseTime.minusHours(1).plusMinutes(45), isFromMe = true),
+                    createMessage(conversationId, "user5", "I've started on the component library", baseTime.minusHours(1).plusMinutes(30), isFromMe = false),
+                    createMessage(conversationId, "user3", "Great! Can you share the progress by EOD?", baseTime.minusHours(1).plusMinutes(15), isFromMe = false),
+                    createMessage(conversationId, "user5", "Absolutely, will have something ready", baseTime.minusMinutes(45), isFromMe = false)
                 ))
             }
-            "3" -> { // Bob
+            "conv_3" -> { // Alex Rivera
                 messages.addAll(listOf(
-                    createMessage(conversationId, "bob", "Did you see the latest Compose update?", baseTime.plusHours(15), isFromMe = false),
-                    createMessage(conversationId, "user1", "Not yet, what are the highlights?", baseTime.plusHours(15).plusMinutes(20), isFromMe = true),
-                    createMessage(conversationId, "bob", "Some great performance improvements and new APIs", baseTime.plusHours(16), isFromMe = false),
-                    createMessage(conversationId, "user1", "Thanks for letting me know!", baseTime.plusHours(16).plusMinutes(15), isFromMe = true)
+                    createMessage(conversationId, "user3", "Did you check out the new design system docs?", baseTime.minusHours(3), isFromMe = false),
+                    createMessage(conversationId, "user1", "Not yet, I'll take a look now", baseTime.minusHours(2).plusMinutes(50), isFromMe = true),
+                    createMessage(conversationId, "user3", "They're really comprehensive. Let me know what you think", baseTime.minusHours(2).plusMinutes(30), isFromMe = false),
+                    createMessage(conversationId, "user1", "Impressive work! Really well organized", baseTime.minusHours(1).plusMinutes(20), isFromMe = true),
+                    createMessage(conversationId, "user3", "Thanks! Much more to come", baseTime.minusHours(1), isFromMe = false)
                 ))
             }
-            "4" -> { // Charlie
+            "conv_4" -> { // Jordan Kim
                 messages.addAll(listOf(
-                    createMessage(conversationId, "charlie", "Working on some bugs today", baseTime.plusHours(20), isFromMe = false),
-                    createMessage(conversationId, "user1", "Same here, what kind of bugs?", baseTime.plusHours(20).plusMinutes(25), isFromMe = true),
-                    createMessage(conversationId, "charlie", "Some memory leaks in the image loading", baseTime.plusHours(21), isFromMe = false)
+                    createMessage(conversationId, "user4", "Just captured some great shots today! 📸", baseTime.minusDays(1), isFromMe = false),
+                    createMessage(conversationId, "user1", "That's awesome! I'd love to see them", baseTime.minusDays(1).plusHours(1), isFromMe = true),
+                    createMessage(conversationId, "user4", "Will send them your way soon", baseTime.minusDays(1).plusHours(2), isFromMe = false)
+                ))
+            }
+            "conv_5" -> { // Taylor Tech
+                messages.addAll(listOf(
+                    createMessage(conversationId, "user5", "The latest commit is ready for review", baseTime.minusDays(2), isFromMe = false),
+                    createMessage(conversationId, "user1", "I'll check it out and provide feedback", baseTime.minusDays(2).plusHours(2), isFromMe = true),
+                    createMessage(conversationId, "user5", "Thanks! Looking forward to your thoughts", baseTime.minusDays(2).plusHours(3), isFromMe = false)
                 ))
             }
         }
