@@ -32,8 +32,8 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         val MIGRATION_1_2 = object : Migration(1, 2) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("""
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("""
                     CREATE TABLE IF NOT EXISTS users (
                         id TEXT PRIMARY KEY NOT NULL,
                         name TEXT NOT NULL,
@@ -46,7 +46,7 @@ abstract class AppDatabase : RoomDatabase() {
                     )
                 """.trimIndent())
 
-                database.execSQL("""
+                db.execSQL("""
                     CREATE TABLE IF NOT EXISTS threads (
                         id TEXT PRIMARY KEY NOT NULL,
                         title TEXT NOT NULL,
@@ -66,11 +66,11 @@ abstract class AppDatabase : RoomDatabase() {
                     )
                 """.trimIndent())
 
-                database.execSQL("CREATE INDEX IF NOT EXISTS index_threads_userId ON threads(userId)")
-                database.execSQL("CREATE INDEX IF NOT EXISTS index_threads_createdAt ON threads(createdAt)")
-                database.execSQL("CREATE INDEX IF NOT EXISTS index_threads_updatedAt ON threads(updatedAt)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_threads_userId ON threads(userId)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_threads_createdAt ON threads(createdAt)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_threads_updatedAt ON threads(updatedAt)")
 
-                database.execSQL("""
+                db.execSQL("""
                     CREATE TABLE IF NOT EXISTS messages (
                         id TEXT PRIMARY KEY NOT NULL,
                         threadId TEXT NOT NULL,
@@ -83,9 +83,9 @@ abstract class AppDatabase : RoomDatabase() {
                     )
                 """.trimIndent())
 
-                database.execSQL("CREATE INDEX IF NOT EXISTS index_messages_threadId ON messages(threadId)")
-                database.execSQL("CREATE INDEX IF NOT EXISTS index_messages_userId ON messages(userId)")
-                database.execSQL("CREATE INDEX IF NOT EXISTS index_messages_createdAt ON messages(createdAt)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_messages_threadId ON messages(threadId)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_messages_userId ON messages(userId)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_messages_createdAt ON messages(createdAt)")
             }
         }
     }
