@@ -45,8 +45,15 @@ dependencies {
     implementation(libs.moshi)
     implementation(libs.okhttp.logging)
 
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
+
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    kapt(libs.androidx.hilt.compiler)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging.ktx)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)

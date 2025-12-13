@@ -19,6 +19,8 @@ import com.ctonew.composemodular.data.db.entities.UserEntity
         UserEntity::class,
         ThreadEntity::class,
         MessageEntity::class,
+        OutboundQueueEntity::class,
+        AttachmentEntity::class,
     ],
     version = 2,
     exportSchema = false,
@@ -29,6 +31,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun threadDao(): ThreadDao
     abstract fun messageDao(): MessageDao
+    abstract fun outboundQueueDao(): OutboundQueueDao
+    abstract fun attachmentDao(): AttachmentDao
 
     companion object {
         val MIGRATION_1_2 = object : Migration(1, 2) {
