@@ -32,7 +32,7 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 /**
- * Telegram-style chat bubble that adapts alignment, shape, and color
+ * Meta Messenger-style chat bubble with modern design
  */
 @Composable
 fun ChatBubble(
@@ -47,7 +47,9 @@ fun ChatBubble(
     val isFromMe = message.isFromMe
     
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp),
         horizontalArrangement = if (isFromMe) Arrangement.End else Arrangement.Start
     ) {
         Column(
@@ -64,7 +66,7 @@ fun ChatBubble(
             
             // Timestamp and status
             if (showTimestamp) {
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(2.dp))
                 MessageStatusRow(
                     message = message,
                     isFromMe = isFromMe
