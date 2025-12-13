@@ -14,7 +14,7 @@ class ThemeRepositoryImpl @Inject constructor() : ThemeRepository {
     private val _preferences = MutableStateFlow(ThemePreferences())
     override val preferences: Flow<ThemePreferences> = _preferences.asStateFlow()
 
-    override suspend fun setAccentColorArgb(colorArgb: Int) {
-        _preferences.value = _preferences.value.copy(accentColorArgb = colorArgb)
+    override suspend fun setAccentColorArgb(argb: Int) {
+        _preferences.value = _preferences.value.copy(accentColorArgb = argb)
     }
 }
