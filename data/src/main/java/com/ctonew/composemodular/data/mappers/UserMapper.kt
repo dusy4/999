@@ -9,6 +9,10 @@ fun UserEntity.toDomain(): User = User(
     name = name,
     email = email,
     createdAt = createdAt,
+    avatarUrl = avatarUrl,
+    username = username,
+    bio = bio,
+    isFollowing = isFollowing,
 )
 
 fun User.toEntity(): UserEntity = UserEntity(
@@ -16,6 +20,10 @@ fun User.toEntity(): UserEntity = UserEntity(
     name = name,
     email = email,
     createdAt = createdAt,
+    avatarUrl = avatarUrl,
+    username = username,
+    bio = bio,
+    isFollowing = isFollowing,
 )
 
 fun UserRemoteDto.toEntity(): UserEntity = UserEntity(
@@ -23,6 +31,10 @@ fun UserRemoteDto.toEntity(): UserEntity = UserEntity(
     name = name,
     email = email,
     createdAt = createdAt,
+    avatarUrl = avatarUrl ?: "",
+    username = username ?: "",
+    bio = bio ?: "",
+    isFollowing = isFollowing ?: false,
 )
 
 fun UserRemoteDto.toDomain(): User = User(
@@ -30,4 +42,8 @@ fun UserRemoteDto.toDomain(): User = User(
     name = name,
     email = email,
     createdAt = createdAt,
+    avatarUrl = avatarUrl ?: "",
+    username = username ?: "",
+    bio = bio ?: "",
+    isFollowing = isFollowing ?: false,
 )

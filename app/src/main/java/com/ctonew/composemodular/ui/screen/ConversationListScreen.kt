@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -18,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -92,37 +95,44 @@ private fun ConversationListHeader(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        color = MaterialTheme.colorScheme.surface,
-        tonalElevation = 2.dp,
+        color = MaterialTheme.colorScheme.background,
         modifier = modifier
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(
-                text = "Messages",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            
-            // Settings button
-            Surface(
-                color = Color.Transparent,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable { onNavigateToSettings() }
-                    .padding(4.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "⚙️",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(8.dp)
+                    text = "Messages",
+                    style = MaterialTheme.typography.displaySmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
+                
+                // Settings button with better styling
+                androidx.compose.material3.IconButton(
+                    onClick = { onNavigateToSettings() },
+                    modifier = Modifier
+                        .size(40.dp)
+                        .background(
+                            MaterialTheme.colorScheme.surfaceVariant,
+                            CircleShape
+                        )
+                ) {
+                    androidx.compose.material3.Icon(
+                        imageVector = Icons.Outlined.Settings,
+                        contentDescription = "Settings",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
             }
         }
     }
@@ -277,11 +287,12 @@ private fun ConversationItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(horizontal = 12.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             // Avatar with unread indicator
-            Box {
+            Box(modifier = Modifier.size(56.dp)) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(conversation.avatarUrl)
@@ -289,24 +300,24 @@ private fun ConversationItem(
                         .build(),
                     contentDescription = "${conversation.title} avatar",
                     modifier = Modifier
-                        .size(48.dp)
-                        .clip(CircleShape)
+                        .fillMaxSize()
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
                 )
                 
                 // Unread count badge
                 if (conversation.unreadCount > 0) {
                     Surface(
-                        color = MaterialTheme.colorScheme.error,
+                        color = MaterialTheme.colorScheme.primary,
                         shape = CircleShape,
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(2.dp)
+                        modifier = Modifier.align(Alignment.TopEnd)
                     ) {
                         Text(
                             text = if (conversation.unreadCount > 99) "99+" else conversation.unreadCount.toString(),
                             style = MaterialTheme.typography.labelSmall,
                             color = Color.White,
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 }
@@ -316,28 +327,26 @@ private fun ConversationItem(
                     Text(
                         text = "🔇",
                         style = MaterialTheme.typography.titleSmall,
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .background(Color.Black.copy(alpha = 0.6f), CircleShape)
-                            .padding(2.dp)
+                        modifier = Modifier.align(Alignment.BottomEnd)
                     )
                 }
             }
             
-            Spacer(modifier = Modifier.width(12.dp))
-            
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     // Title with pinned indicator
                     Text(
                         text = conversation.title,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = if (conversation.unreadCount > 0) FontWeight.Bold else FontWeight.Normal,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = if (conversation.unreadCount > 0) FontWeight.SemiBold else FontWeight.Normal,
+                        color = MaterialTheme.colorScheme.onBackground,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f)
@@ -346,42 +355,31 @@ private fun ConversationItem(
                     if (conversation.isPinned) {
                         Text(
                             text = "📌",
-                            style = MaterialTheme.typography.titleSmall,
+                            style = MaterialTheme.typography.labelMedium,
                             modifier = Modifier.padding(start = 4.dp)
                         )
                     }
-                }
-                
-                Spacer(modifier = Modifier.height(4.dp))
-                
-                // Last message preview
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    val lastMessageText = conversation.lastMessage?.content?.take(50) ?: "No messages yet"
-                    Text(
-                        text = lastMessageText,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = if (conversation.unreadCount > 0) {
-                            MaterialTheme.colorScheme.onSurface
-                        } else {
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                        },
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f)
-                    )
                     
                     // Time of last message
                     conversation.lastMessage?.timestamp?.let { timestamp ->
                         Text(
                             text = formatTime(timestamp),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(start = 8.dp)
                         )
                     }
                 }
+                
+                // Last message preview
+                val lastMessageText = conversation.lastMessage?.content?.take(40) ?: "No messages yet"
+                Text(
+                    text = lastMessageText,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
     }

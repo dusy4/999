@@ -11,6 +11,14 @@ fun ThreadEntity.toDomain(): Thread = Thread(
     userId = userId,
     createdAt = createdAt,
     updatedAt = updatedAt,
+    content = content,
+    mediaUrls = mediaUrls,
+    replyCount = replyCount,
+    likeCount = likeCount,
+    isLiked = isLiked,
+    repostCount = repostCount,
+    isReposted = isReposted,
+    parentThreadId = parentThreadId,
 )
 
 fun Thread.toEntity(): ThreadEntity = ThreadEntity(
@@ -20,6 +28,14 @@ fun Thread.toEntity(): ThreadEntity = ThreadEntity(
     userId = userId,
     createdAt = createdAt,
     updatedAt = updatedAt,
+    content = content,
+    mediaUrls = mediaUrls,
+    replyCount = replyCount,
+    likeCount = likeCount,
+    isLiked = isLiked,
+    repostCount = repostCount,
+    isReposted = isReposted,
+    parentThreadId = parentThreadId,
 )
 
 fun ThreadRemoteDto.toEntity(): ThreadEntity = ThreadEntity(
@@ -29,6 +45,14 @@ fun ThreadRemoteDto.toEntity(): ThreadEntity = ThreadEntity(
     userId = userId,
     createdAt = createdAt,
     updatedAt = updatedAt,
+    content = content ?: "",
+    mediaUrls = mediaUrls ?: emptyList(),
+    replyCount = replyCount ?: 0,
+    likeCount = likeCount ?: 0,
+    isLiked = isLiked ?: false,
+    repostCount = repostCount ?: 0,
+    isReposted = isReposted ?: false,
+    parentThreadId = parentThreadId,
 )
 
 fun ThreadRemoteDto.toDomain(): Thread = Thread(
@@ -38,4 +62,12 @@ fun ThreadRemoteDto.toDomain(): Thread = Thread(
     userId = userId,
     createdAt = createdAt,
     updatedAt = updatedAt,
+    content = content ?: "",
+    mediaUrls = mediaUrls ?: emptyList(),
+    replyCount = replyCount ?: 0,
+    likeCount = likeCount ?: 0,
+    isLiked = isLiked ?: false,
+    repostCount = repostCount ?: 0,
+    isReposted = isReposted ?: false,
+    parentThreadId = parentThreadId,
 )
