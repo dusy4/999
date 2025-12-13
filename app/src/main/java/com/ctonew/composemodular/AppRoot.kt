@@ -5,7 +5,7 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import com.ctonew.composemodular.ui.navigation.ChatNavigationGraph
+import com.ctonew.composemodular.ui.navigation.ThreadsNavigationGraph
 import com.ctonew.composemodular.ui.theme.ComposeModularTheme
 import com.ctonew.composemodular.viewmodel.ThemeViewModel
 
@@ -17,7 +17,7 @@ fun AppRoot(
     val navController = rememberNavController()
 
     ComposeModularTheme(themePreferences = preferences) {
-        ChatNavigationGraph(
+        ThreadsNavigationGraph(
             navController = navController
         )
     }
